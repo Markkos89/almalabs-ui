@@ -11,6 +11,7 @@ export function RequestCard({ request }: any) {
       onClick={() => {
         router.push(`/requests/${request.id}`);
       }}
+      className="cursor-pointer"
     >
       <CardHeader>
         <CardTitle className="flex justify-between">{request?.title}</CardTitle>

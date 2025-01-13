@@ -7,45 +7,36 @@ import {
 } from "@/components/ui/card";
 import { getRequest } from "../requests.api";
 import Link from "next/link";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
+import ContactButton from "@/components/contact-button";
 
-interface Props {
-  params: {
-    id: string;
-  };
-}
+type Params = Promise<{ id: string }>;
 
-async function RequestDetailPage({ params }: Props) {
-  const request = await getRequest(params.id);
+async function RequestDetailPage({ params }: { params: Params }) {
+  const { id } = await params;
+  const request = await getRequest(id);
 
   return (
-    <div className="flex justify-center items-center h-screen">
+    <div className="flex mx-2 flex-col justify-center items-center h-screen gap-4">
       <Card>
         <CardHeader>
           <CardTitle className="flex justify-between">
-            Request Detail: {request.id}
-            <Link className={buttonVariants()} href="/">
-              Go back
-            </Link>
+            Request #{request.id}
           </CardTitle>
         </CardHeader>
         <CardContent>
           <h1>{request.title}</h1>
           <p>{request.description}</p>
-          {/* TODO: Add email contact button */}
         </CardContent>
-        <CardFooter className="flex justify-between">
-          <Button
-            className="mt-5"
-            variant="default"
-            onClick={() =>
-              (window.location.href = `mailto:${request?.contact}`)
-            }
-          >
-            Contact
-          </Button>
+        <CardFooter className="flex justify-center">
+          <ContactButton contact={request.contact} />
         </CardFooter>
       </Card>
+      <div>
+        <Link className={buttonVariants()} href="/">
+          Go back
+        </Link>
+      </div>
     </div>
   );
 }
